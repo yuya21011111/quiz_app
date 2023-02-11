@@ -1,0 +1,172 @@
+<ons-page>
+<div class="background" style="background-color: #ffffe0;"></div>
+    <ons-toolbar>
+        <div class="left"><ons-back-button>戻る</ons-back-button></div>
+        <div class="center">クイズページ</div>
+    </ons-toolbar>
+    <!-- TOP画像 -->
+     <div class="img_block">
+        <img src="image/popute.gif" id="img"  width="400" height="200">
+    </div>
+      <!-- 正解、不正解表示 -->
+      <div id="correct" class="center"></div>
+     <!-- 問題表示 -->
+     <div class="dataList">
+         <div id="Issue" style="background-color: #ffffe0;"></div>
+      </div>
+     <br>
+     <!-- 選択肢表示 -->
+     <ol class="answer" style = "list-style-type:none;">
+       <li data-answer="A" id="question1"></li>
+       <br>
+       <br>
+       <li data-answer="B" id="question2"></li>
+        <br>
+        <br>
+       <li data-answer="C" id="question3"></li>
+        <br>
+       <br>
+       <li data-answer="D"id="question4"></li>
+     </ol>
+     <button id="next"></button>
+
+
+     
+    <script>
+        //APIキー
+        //  var applicationKey = 'fb54ef44c4e8f4026067cfaf963537346c820119c4719cf7684d5e83cc4db5bc';
+        //  var clientKey = '60e6e76c28ae0366582514516b85c815526bfae0a9dd4bb8eadc89e8abc8750d';
+
+       var applicationKey = '99578d7d2cd8186137b0a0ac41230caef136e037daa4abe201c4197c3e65e778';
+         var clientKey = '500095a975ca38e3a9fd6a24aef1cd5f6602724c510f493013517b07eb53b4f0';
+
+         // SDK初期化
+         var ncmb = new NCMB(applicationKey, clientKey);
+
+         // list 抽出
+         var question_title = document.querySelector('#Issue');
+         var q1 = document.querySelector('#question1');
+         var q2 = document.querySelector('#question2');
+         var q3 = document.querySelector('#question3');
+         var q4 = document.querySelector('#question4');
+         var cor = document.querySelector('#correct');
+         var next_btn = document.querySelector('#next');
+         var count = 0;
+         var number_of_times = 0;
+        
+        ons.getScriptPage().onShow=function(){
+            var genre = this.data.hand_over_data.name;
+
+
+       
+        var Quizlist = ncmb.DataStore("Quizlist");
+         Quizlist.order('createData',true)
+         .equalTo('genre_1',genre)
+         .fetchAll()
+        .then(function(result){
+        // 成功時の処理
+        // alert(genre);
+        var quiz_list = result;
+        var min = 0;
+        var max = result.length - 1;
+        var random_Number = Math.floor( Math.random() * (max + 1 - min) ) + min;
+        console.log(random_Number)
+        var object = result[random_Number];
+        var issue = object.get('quiz');
+        var questionID_1 = object.get('choice1');
+        var questionID_2 = object.get('choice2');
+        var questionID_3 = object.get('choice3');
+        var questionID_4 = object.get('choice4');
+        var questionID_correct = object.get('answer_1');
+
+        console.log(questionID_1);
+        console.log('取得件数' + result.length);
+        
+        //問題と選択肢を挿入
+        question_title.innerHTML = `問題.${issue}`;
+        q1.innerHTML = 'A.' + questionID_1;
+        q2.innerHTML = 'B.' + questionID_2;
+        q3.innerHTML = 'C.' + questionID_3;
+        q4.innerHTML = 'D.' + questionID_4;
+
+        // data-answerを取得
+        var answer = document.querySelectorAll('ol.answer li')
+        answer.forEach(li => li.addEventListener('click',chuck))
+       // 正誤判定
+        function chuck(event) {
+            var li_list = event.currentTarget;
+            var data_set = li_list.dataset.answer;
+            // alert(questionID_correct)
+            // alert(data_set)
+            
+            if (questionID_correct == data_set){
+                cor.innerHTML = '<span id="correct_a" style="color: #ff0000;">　　　　　正解！</span>';
+                count = count + 1;
+                 number_of_times = number_of_times + 1;
+                alert(count)
+                // クリックを１度のみに制限
+                $('ol').css('pointer-events', 'none');
+            }
+            else {
+                cor.innerHTML = '<span id="correct_a"  style="color: #0000ff;">　　　　　不正解....</span>';
+                number_of_times = number_of_times + 1;
+                // クリックを１度のみに制限    
+                $('ol').css('pointer-events', 'none');                       
+            }
+            //ボタンを追加
+            next_btn.innerHTML = '次のクイズ';
+            
+            // 5回終えたらページを移動
+            if (number_of_times == 5) {
+                 var ans_count = {
+                 num: count
+                 };
+                
+            //    document.querySelector("#navigator").pushPage("complete.html");
+             document.querySelector("#navigator").pushPage("complete.html",{data: {ans_count:ans_count}});
+            }
+        }
+        
+        // 次のクイズを表示
+        document.querySelector('#next').onclick = function() {
+        rand_img()
+         min = 0;
+         max = result.length - 1;
+         random_Number = Math.floor( Math.random() * (max + 1 - min) ) + min;
+        console.log(random_Number)
+         object = result[random_Number];
+         issue = object.get('quiz');
+         questionID_1 = object.get('choice1');
+         questionID_2 = object.get('choice2');
+         questionID_3 = object.get('choice3');
+         questionID_4 = object.get('choice4');
+         questionID_correct = object.get('answer_1');
+
+        question_title.innerHTML = `問題.${issue}`;
+        q1.innerHTML = 'A.' + questionID_1;
+        q2.innerHTML = 'B.' + questionID_2;
+        q3.innerHTML = 'C.' + questionID_3;
+        q4.innerHTML = 'D.' + questionID_4;
+        cor.innerHTML = '';
+        next_btn .innerHTML = '';
+         
+        $('ol').css('pointer-events', 'auto');
+        var answer = document.querySelectorAll('ol.answer li')
+        answer.forEach(li => li.addEventListener('click',chuck))
+            
+       }
+
+       })
+    .catch(function(error){
+        // 失敗時の処理
+        alert(error);
+        ons.notification.alert('データ取得に失敗しました');
+        console.log('全件検索失敗');
+       });
+      }
+    rand_img()
+    // 次の問題ページへ
+    
+    </script>
+    
+    </ons-page>

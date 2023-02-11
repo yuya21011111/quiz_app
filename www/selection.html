@@ -1,0 +1,58 @@
+<ons-page>
+<div class="background" style="background-color: #ffffe0;"></div>
+    <ons-toolbar>
+        <div class="center">クイズ出題アプリ</div>
+    </ons-toolbar>
+     <div class="img_top">
+        <img src="image/select.gif"  width="400" height="300">
+    </div>
+    <div class="center">
+         <div id="select_top" style="background-color: #FFFF00;">ジャンル</div>
+    </div>
+    <div class="center_top">
+        <ons-button class="blue scanner-button" id="SearchButton2" modifier="large--cta">オールジャンル</ons-button>
+        <br>
+         <ons-button class="blue scanner-button" id="SearchButton3" modifier="large--cta">なぞなぞ</ons-button>
+         <br>
+          <ons-button class="blue scanner-button" id="SearchButton4" modifier="large--cta">れきし</ons-button>
+          <br>
+           <ons-button class="blue scanner-button" id="SearchButton5" modifier="large--cta">ごとうち</ons-button>
+        <br>
+        <br>
+    </div>
+       
+    <script>
+    ons.getScriptPage().onInit=function(){
+        document.querySelector('#SearchButton2').onclick = function() {
+            document.querySelector("#navigator").pushPage("quiz.html");
+        }
+
+         document.querySelector('#SearchButton3').onclick = function() {
+              var btn_text = document.querySelector('#SearchButton3');
+              
+              var hand_over_data = {
+                name: btn_text.textContent
+            };
+            document.querySelector("#navigator").pushPage("quiz2.html",{data: {hand_over_data:hand_over_data}});
+        }
+
+        document.querySelector('#SearchButton4').onclick = function() {
+              var btn_text = document.querySelector('#SearchButton4');
+              
+              var hand_over_data = {
+                name: btn_text.textContent
+            };
+            document.querySelector("#navigator").pushPage("quiz2.html",{data: {hand_over_data:hand_over_data}});
+        }
+
+        document.querySelector('#SearchButton5').onclick = function() {
+              var btn_text = document.querySelector('#SearchButton5');
+              
+              var hand_over_data = {
+                name: btn_text.textContent
+            };
+            document.querySelector("#navigator").pushPage("quiz2.html",{data: {hand_over_data:hand_over_data}});
+        }
+     }
+    </script>
+</ons-page>

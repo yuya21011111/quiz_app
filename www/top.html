@@ -1,0 +1,26 @@
+<ons-page>
+<div class="background" style="background-color: #ffffe0;"></div>
+    <ons-toolbar>
+        <div class="center">クイズ出題アプリ</div>
+    </ons-toolbar>
+     <div class="img_top">
+        <img src="image/top_ss.gif"  width="400" height="300">
+    </div>
+    <div class="center_top">
+        <ons-button class="blue scanner-button" id="SearchButton1" modifier="large--cta">クイズスタート</ons-button>
+        <br>
+        <br>
+    <audio id="btn_audio_t">
+        <source src="audio/btn_audio_t.mp3" type="audio/mp3">
+    </audio>
+    </div>
+       
+    <script>
+     ons.getScriptPage().onInit=function(){
+        document.querySelector('#SearchButton1').onclick = function() {
+            document.querySelector("#navigator").pushPage("selection.html");
+        }
+     }
+     audio_t();
+    </script>
+</ons-page>

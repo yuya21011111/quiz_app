@@ -1,0 +1,38 @@
+<ons-page>
+<div class="background" style="background-color: #00a0a0;"></div>
+<div class="img_top">
+  <img src="image/com.gif"  width="400" height="300">
+</div>
+<div id="container">
+  <div class="animate-title inview">COMPLETE!</div>
+   <div class="animate-title2 inview"></div>
+</div>
+
+<!-- <div class="btn" onclick="audio()">音がなるよ!!</div> -->
+
+ <ons-button class="restart" id="restart" modifier="large--cta">リスタート</ons-button>
+
+<audio id="btn_audio">
+    <source src="audio/btn_audio.mp3" type="audio/mp3">
+</audio>
+
+<script>
+ons.getScriptPage().onShow=function(){
+    var el = document.querySelector('.animate-title');
+    var el2 = document.querySelector('.animate-title2');
+    var str = el.innerHTML.trim().split("");
+    var point = this.data.ans_count.num;
+
+    el2.innerHTML = '正解率：' + point + '/' + '5';
+    el.innerHTML = str.reduce((acc, curr) => {
+        curr = curr.replace(/\s+/, '&nbsp;');
+        return `${acc}<span class="char">${curr}</span>`;
+    }, "");
+    
+}
+audio();
+document.querySelector('#restart').onclick = function() {
+    location.reload();
+}
+</script>
+</ons-page>
